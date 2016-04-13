@@ -1,0 +1,6 @@
+*.o
+*.d
+*.class
+*.pyc
+*.elf
+parallelization
