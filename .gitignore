@@ -4,3 +4,5 @@
 *.pyc
 *.elf
 parallelization
+output-sparse
+simple-bench

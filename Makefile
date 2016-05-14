@@ -10,15 +10,29 @@ endif
 
 CFLAGS   := -pedantic -std=$(CSTD) -Wall -Werror -O3
 CPPFLAGS := -pedantic -std=$(CPPSTD) -Wall -Werror -O3
-LIBFLAGS := 
+LIBFLAGS := -fopenmp
 
-all: parallelization
+all: parallelization simple-bench output-sparse
 
 parallelization : parallelization.cc
 	$(CXX) $(CPPFLAGS) -o parallelization parallelization.cc $(LIBFLAGS)
 
-test : all
+simple-bench : simple-bench.cc
+	$(CXX) $(CPPFLAGS) -o simple-bench simple-bench.cc $(LIBFLAGS)
+
+output-sparse : output-sparse.cc
+	$(CXX) $(CPPFLAGS) -o output-sparse output-sparse.cc $(LIBFLAGS)
+
+test : test-parallelization test-simple-bench test-output-sparse
+
+test-parallelization : parallelization
 	./parallelization
+
+test-simple-bench : simple-bench
+	timeout --preserve-status --signal=SIGINT 1 ./simple-bench
+
+test-output-sparse : output-sparse
+	./output-sparse.sh
 
 clean :
 	rm -f *.o
@@ -28,5 +42,7 @@ clean :
 	rm -f *.pyc
 	rm -f *.out
 	rm -f parallelization
+	rm -f simple-bench
+	rm -f output-sparse
 
 -include *.d
