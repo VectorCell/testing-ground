@@ -12,7 +12,10 @@ CFLAGS   := -pedantic -std=$(CSTD) -Wall -Werror -O3
 CPPFLAGS := -pedantic -std=$(CPPSTD) -Wall -Werror -O3
 LIBFLAGS := -fopenmp
 
-all: parallelization simple-bench output-sparse
+all: temp parallelization simple-bench output-sparse
+
+temp : temp.cc
+	$(CXX) $(CPPFLAGS) -o temp temp.cc $(LIBFLAGS)
 
 parallelization : parallelization.cc
 	$(CXX) $(CPPFLAGS) -o parallelization parallelization.cc $(LIBFLAGS)
@@ -23,7 +26,8 @@ simple-bench : simple-bench.cc
 output-sparse : output-sparse.cc
 	$(CXX) $(CPPFLAGS) -o output-sparse output-sparse.cc $(LIBFLAGS)
 
-test : test-parallelization test-simple-bench test-output-sparse
+test : temp
+	./temp < temp.in
 
 test-parallelization : parallelization
 	./parallelization
@@ -41,6 +45,7 @@ clean :
 	rm -f *.class
 	rm -f *.pyc
 	rm -f *.out
+	rm -f temp
 	rm -f parallelization
 	rm -f simple-bench
 	rm -f output-sparse
