@@ -12,7 +12,7 @@ CFLAGS   := -pedantic -std=$(CSTD) -Wall -Werror -O3
 CPPFLAGS := -pedantic -std=$(CPPSTD) -Wall -Werror -O3
 LIBFLAGS := -fopenmp
 
-all: temp parallelization simple-bench output-sparse
+all: temp parallelization simple-bench output-sparse fft
 
 temp : temp.cc
 	$(CXX) $(CPPFLAGS) -o temp temp.cc $(LIBFLAGS)
@@ -25,6 +25,9 @@ simple-bench : simple-bench.cc
 
 output-sparse : output-sparse.cc
 	$(CXX) $(CPPFLAGS) -o output-sparse output-sparse.cc $(LIBFLAGS)
+
+fft : fft.cc
+	$(CXX) $(CPPFLAGS) -o fft fft.cc $(LIBFLAGS)
 
 test : temp
 	./temp < temp.in
@@ -49,5 +52,6 @@ clean :
 	rm -f parallelization
 	rm -f simple-bench
 	rm -f output-sparse
+	rm -f fft
 
 -include *.d
