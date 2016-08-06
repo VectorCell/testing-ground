@@ -27,7 +27,10 @@ output-sparse : output-sparse.cc
 	$(CXX) $(CPPFLAGS) -o output-sparse output-sparse.cc $(LIBFLAGS)
 
 fft : fft.cc
-	$(CXX) $(CPPFLAGS) -o fft fft.cc $(LIBFLAGS)
+	$(CXX) $(CPPFLAGS) -o fft fft.cc $(LIBFLAGS) -Ikiss_fft130
+
+genrand : genrand.cc
+	$(CXX) $(CPPFLAGS) -o genrand genrand.cc $(LIBFLAGS)
 
 test : temp
 	./temp < temp.in
@@ -40,6 +43,9 @@ test-simple-bench : simple-bench
 
 test-output-sparse : output-sparse
 	./output-sparse.sh
+
+test-genrand: genrand
+	./genrand | pv -s 16g | dd bs=4k count=4M 2> /dev/null > /dev/null
 
 clean :
 	rm -f *.o
